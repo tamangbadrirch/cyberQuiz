@@ -8,6 +8,7 @@ import os
 from datetime import datetime
 import hashlib
 import base64
+import sqlite3
 
 # Get API key from Streamlit secrets
 GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
@@ -15,6 +16,16 @@ GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
 # Create a directory for storing quizzes if it doesn't exist
 if not os.path.exists('quizzes'):
     os.makedirs('quizzes')
+
+def get_db_connection():
+    conn = sqlite3.connect("quiz.db", check_same_thread=False)
+    conn.execute("""
+        CREATE TABLE IF NOT EXISTS quizzes (
+            quiz_id TEXT PRIMARY KEY,
+            questions_json TEXT
+        )
+    """)
+    return conn
 
 def save_quiz_to_file(quiz_id, questions):
     """Save quiz to a JSON file"""
