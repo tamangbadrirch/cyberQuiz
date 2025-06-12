@@ -8,7 +8,27 @@ import os
 from datetime import datetime
 import hashlib
 import base64
-import sqlite3
+from supabase import create_client, Client
+
+# --- Supabase Setup ---
+SUPABASE_URL = st.secrets["SUPABASE_URL"]
+SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
+
+@st.cache_resource
+def get_supabase_client():
+    return create_client(SUPABASE_URL, SUPABASE_KEY)
+
+def save_quiz_to_supabase(quiz_id, questions):
+    supabase: Client = get_supabase_client()
+    # Upsert (insert or update) the quiz
+    supabase.table("quizzes").upsert({"quiz_id": quiz_id, "questions_json": questions}).execute()
+
+def load_quiz_from_supabase(quiz_id):
+    supabase: Client = get_supabase_client()
+    result = supabase.table("quizzes").select("questions_json").eq("quiz_id", quiz_id).execute()
+    if result.data and len(result.data) > 0:
+        return result.data[0]["questions_json"]
+    return None
 
 # Get API key from Streamlit secrets
 GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
@@ -107,7 +127,6 @@ def parse_mcqs(gemini_response):
     return questions
 
 def generate_quiz_id(questions):
-    # Create a unique ID based on the quiz content
     quiz_str = json.dumps(questions, sort_keys=True)
     return base64.urlsafe_b64encode(hashlib.md5(quiz_str.encode()).digest()).decode()[:8]
 
@@ -206,21 +225,18 @@ def main():
         </div>
     """, unsafe_allow_html=True)
 
-    # Get quiz_id from URL parameters (use st.query_params instead of deprecated experimental)
     query_params = st.query_params
     quiz_id = query_params.get("quiz", [None])[0] if "quiz" in query_params else None
 
     if quiz_id:
-        # Try to load quiz from file
-        questions = load_quiz_from_file(quiz_id)
+        questions = load_quiz_from_supabase(quiz_id)
         if questions:
             show_quiz_interface(questions)
         else:
             st.error(
                 "Quiz not found. Please generate a new quiz.\n\n"
-                "Note: On Streamlit Cloud, quizzes are only available if generated in the current deployment. "
-                "If you just deployed or rebooted the app, please generate a new quiz and share the new link. "
-                "For permanent quiz links, consider using a database or Google Drive for storage."
+                "Note: Quizzes are only available if generated and saved in Supabase. "
+                "If you just created a quiz, please share the new link."
             )
             quiz_id = None
 
@@ -241,16 +257,11 @@ def main():
                     if not questions:
                         st.error("Could not generate questions. Try with a different file or fewer questions.")
                     else:
-                        # Generate unique quiz ID and store in file
                         quiz_id = generate_quiz_id(questions)
-                        save_quiz_to_file(quiz_id, questions)
-                        
+                        save_quiz_to_supabase(quiz_id, questions)
                         st.success("Quiz generated successfully!")
                         st.markdown("### To share this quiz with students:")
-                        st.markdown("""
-                        1. Your quiz is now saved and can be accessed using this URL:
-                           `https://cyberquizbt.streamlit.app/?quiz={quiz_id}`
-                        """)
+                        st.markdown(f"1. Your quiz is now saved and can be accessed using this URL:\n   `https://cyberquizbt.streamlit.app/?quiz={quiz_id}`")
                         st.markdown(f"**Quiz ID:** `{quiz_id}`")
                         st.markdown("Share this complete URL with your students.")
 
