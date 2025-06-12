@@ -1,0 +1,112 @@
+[
+  {
+    "question": "What is the primary function of a Security Operations Center (SOC)?",
+    "options": [
+      "Developing new security software.",
+      "Monitoring and responding to security threats.",
+      "Conducting penetration testing on client systems.",
+      "Managing user accounts and access privileges."
+    ],
+    "correct_answer": 1,
+    "explanation": "The SOC's core responsibility is the proactive monitoring and reactive response to security incidents."
+  },
+  {
+    "question": "Which technology plays a central role in log management and analysis within a SOC?",
+    "options": [
+      "SOAR",
+      "Wazuh",
+      "Syslog",
+      "SIEM"
+    ],
+    "correct_answer": 3,
+    "explanation": "SIEM (Security Information and Event Management) systems are specifically designed for collecting, analyzing, and correlating security logs from various sources."
+  },
+  {
+    "question": "What is the primary goal of Threat Hunting within a SOC?",
+    "options": [
+      "Responding to known security alerts.",
+      "Proactively searching for unknown threats.",
+      "Analyzing security logs for compliance reasons.",
+      "Managing security budgets and resources."
+    ],
+    "correct_answer": 1,
+    "explanation": "Threat hunting is a proactive approach to identifying threats that may have evaded traditional security measures."
+  },
+  {
+    "question": "What does SOAR stand for in the context of cybersecurity?",
+    "options": [
+      "Security Output and Response",
+      "Security Orchestration and Remediation",
+      "System Optimization and Response",
+      "Security Orchestration, Automation, and Response"
+    ],
+    "correct_answer": 3,
+    "explanation": "SOAR integrates security tools to automate responses and improve efficiency in incident handling."
+  },
+  {
+    "question": "Why is continuous monitoring crucial for effective cybersecurity?",
+    "options": [
+      "It simplifies log analysis.",
+      "It reduces the need for human intervention.",
+      "It provides real-time visibility into security posture.",
+      "It automatically resolves all security incidents."
+    ],
+    "correct_answer": 2,
+    "explanation": "Continuous monitoring provides ongoing insight into the security landscape, allowing for timely detection and response."
+  },
+  {
+    "question": "Which of the following is NOT a key element of a comprehensive continuous monitoring strategy?",
+    "options": [
+      "Regular security assessments",
+      "Automated threat detection",
+      "Manual log analysis only",
+      "Incident response planning"
+    ],
+    "correct_answer": 2,
+    "explanation": "While manual analysis has its place, a comprehensive strategy relies heavily on automation for scalability and efficiency."
+  },
+  {
+    "question": "How does SOAR improve the efficiency of a SOC?",
+    "options": [
+      "By eliminating the need for human analysts.",
+      "By automating repetitive tasks and workflows.",
+      "By solely focusing on threat hunting activities.",
+      "By reducing the amount of data collected."
+    ],
+    "correct_answer": 1,
+    "explanation": "SOAR automates many routine security tasks, freeing up analysts to focus on more complex issues."
+  },
+  {
+    "question": "What is a key benefit of using a SIEM system?",
+    "options": [
+      "Reduced need for security training.",
+      "Simplified network configuration.",
+      "Centralized security log management and analysis.",
+      "Complete elimination of security threats."
+    ],
+    "correct_answer": 2,
+    "explanation": "SIEM systems provide a single point of view for all security logs, enabling comprehensive analysis."
+  },
+  {
+    "question": "What is Wazuh primarily used for?",
+    "options": [
+      "Automated incident response",
+      "Security orchestration",
+      "Open-source security monitoring",
+      "Threat intelligence gathering"
+    ],
+    "correct_answer": 2,
+    "explanation": "Wazuh is an open-source security monitoring platform."
+  },
+  {
+    "question": "What is a crucial component of effective incident handling within a SOC?",
+    "options": [
+      "Ignoring minor security events.",
+      "Relying solely on automated responses.",
+      "Thorough investigation and documentation.",
+      "Immediate system shutdown."
+    ],
+    "correct_answer": 2,
+    "explanation": "Proper investigation and thorough documentation are vital for effective incident response and future prevention."
+  }
+]
