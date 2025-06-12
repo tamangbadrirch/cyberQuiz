@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Cybersecurity Quiz Generator
 
 This application generates interactive quizzes from PowerPoint (PPTX) and PDF files, specifically designed for cybersecurity students. It extracts content from the uploaded files and creates multiple-choice questions based on the material.
@@ -47,3 +48,7 @@ This application generates interactive quizzes from PowerPoint (PPTX) and PDF fi
 ## Note
 
 The application uses a transformer model to generate questions, which may take a few moments to load on first run. The quality of generated questions depends on the clarity and structure of the input material. 
+=======
+# cyberQuiz
+Quiz for Cyber Security Students
+>>>>>>> 54b6ef8d1aa46d3564d41df356ff17d8c54b0368

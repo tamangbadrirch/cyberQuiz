@@ -9,8 +9,26 @@ from datetime import datetime
 import hashlib
 import base64
 
-# Hardcoded Gemini API key for instructor use only
-GEMINI_API_KEY = "AIzaSyDXhNgu0iMq1DG5zfetJ6KN07H-9yf6LzE"  # Gemini API key for quiz generation
+# Get API key from Streamlit secrets
+GEMINI_API_KEY = st.secrets["GEMINI_API_KEY"]
+
+# Create a directory for storing quizzes if it doesn't exist
+if not os.path.exists('quizzes'):
+    os.makedirs('quizzes')
+
+def save_quiz_to_file(quiz_id, questions):
+    """Save quiz to a JSON file"""
+    file_path = f'quizzes/{quiz_id}.json'
+    with open(file_path, 'w', encoding='utf-8') as f:
+        json.dump(questions, f, ensure_ascii=False, indent=2)
+
+def load_quiz_from_file(quiz_id):
+    """Load quiz from a JSON file"""
+    file_path = f'quizzes/{quiz_id}.json'
+    if os.path.exists(file_path):
+        with open(file_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    return None
 
 def extract_text_from_pdf(pdf_file):
     text = ""
@@ -173,9 +191,9 @@ def main():
     quiz_id = query_params.get("quiz", [None])[0]
 
     if quiz_id:
-        # Load quiz from session state if it exists
-        if 'quizzes' in st.session_state and quiz_id in st.session_state.quizzes:
-            questions = st.session_state.quizzes[quiz_id]
+        # Try to load quiz from file
+        questions = load_quiz_from_file(quiz_id)
+        if questions:
             show_quiz_interface(questions)
         else:
             st.error("Quiz not found. Please generate a new quiz.")
@@ -198,29 +216,18 @@ def main():
                     if not questions:
                         st.error("Could not generate questions. Try with a different file or fewer questions.")
                     else:
-                        # Generate unique quiz ID and store in session state
+                        # Generate unique quiz ID and store in file
                         quiz_id = generate_quiz_id(questions)
-                        if 'quizzes' not in st.session_state:
-                            st.session_state.quizzes = {}
-                        st.session_state.quizzes[quiz_id] = questions
+                        save_quiz_to_file(quiz_id, questions)
                         
                         st.success("Quiz generated successfully!")
                         st.markdown("### To share this quiz with students:")
                         st.markdown("""
-                        1. Deploy this app to Streamlit Cloud:
-                           - Go to [share.streamlit.io](https://share.streamlit.io)
-                           - Sign up/login with GitHub
-                           - Create a new repository and push this app
-                           - Deploy the app
-                        
-                        2. After deployment, you'll get a base URL like:
-                           `https://yourusername-quiz-app.streamlit.app`
-                        
-                        3. Share this complete URL with your students:
-                           `https://yourusername-quiz-app.streamlit.app?quiz={quiz_id}`
+                        1. Your quiz is now saved and can be accessed using this URL:
+                           `https://cyberquizbt.streamlit.app/?quiz={quiz_id}`
                         """)
                         st.markdown(f"**Quiz ID:** `{quiz_id}`")
-                        st.markdown("Add this quiz ID to your deployed app's URL to share with students.")
+                        st.markdown("Share this complete URL with your students.")
 
 if __name__ == "__main__":
     main() 
