@@ -148,17 +148,16 @@ def show_quiz_interface(questions):
         else:
             st.error("Incorrect!")
 
-        col_exp1, col_exp2 = st.columns([6,1])
-        with col_exp2:
-            show_exp = st.button("Explanation", key=f"explanation_{q_idx}")
+        # Improved button layout: Explanation and Next on the same line, centered
+        exp_col, next_col, _ = st.columns([2,2,6])
+        with exp_col:
+            show_exp = st.button("💡 Explanation", key=f"explanation_{q_idx}")
+        with next_col:
+            next_btn = st.button("➡️ Next", key=f"next_{q_idx}")
         if show_exp:
             st.session_state.explanation_shown = True
         if st.session_state.explanation_shown:
             st.info(f"Explanation: {q['explanation']}")
-
-        col_next = st.columns([8,1])
-        with col_next[1]:
-            next_btn = st.button("Next", key=f"next_{q_idx}")
         if next_btn:
             st.session_state.current_question += 1
             st.session_state.checked = False
@@ -185,10 +184,11 @@ def show_result_summary(questions):
 def main():
     st.set_page_config(page_title="Cybersecurity Quiz Generator", layout="centered")
     st.title("Cybersecurity Quiz Generator (AI-Powered)")
+    st.markdown('<div style="color: #888; font-size: 18px; margin-bottom: 20px;">developed by : <b>Badri Tamang</b> {S+, SCS-C02}</div>', unsafe_allow_html=True)
 
-    # Get quiz_id from URL parameters
-    query_params = st.experimental_get_query_params()
-    quiz_id = query_params.get("quiz", [None])[0]
+    # Get quiz_id from URL parameters (use st.query_params instead of deprecated experimental)
+    query_params = st.query_params
+    quiz_id = query_params.get("quiz", [None])[0] if "quiz" in query_params else None
 
     if quiz_id:
         # Try to load quiz from file
