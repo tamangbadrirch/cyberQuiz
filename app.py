@@ -240,8 +240,6 @@ def main():
 
     if quiz_id:
         questions = load_quiz_from_supabase(quiz_id)
-        st.write("DEBUG: quiz_id from URL:", quiz_id)
-        st.write("DEBUG: questions loaded from Supabase:", questions)
         if questions and isinstance(questions, list) and len(questions) > 0:
             show_quiz_interface(questions)
         else:
