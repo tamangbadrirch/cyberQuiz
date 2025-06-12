@@ -183,8 +183,17 @@ def show_result_summary(questions):
 
 def main():
     st.set_page_config(page_title="Cybersecurity Quiz Generator", layout="centered")
-    st.title("Cybersecurity Quiz Generator (AI-Powered)")
-    st.markdown('<div style="color: #888; font-size: 18px; margin-bottom: 20px;">developed by : <b>Badri Tamang</b> {S+, SCS-C02}</div>', unsafe_allow_html=True)
+    st.markdown("""
+        <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+            <div>
+                <span style="font-size: 2.2rem; font-weight: 700;">Cybersecurity Quiz Generator</span>
+                <span style="font-size: 1.1rem; font-weight: 400; color: #FF4B4B; vertical-align: super;">(AI-Powered)</span>
+            </div>
+            <div style="text-align: right; color: #888; font-size: 17px; margin-bottom: 10px; min-width: 320px;">
+                developed by : <b>Badri Tamang</b> {S+, SCS-C02}
+            </div>
+        </div>
+    """, unsafe_allow_html=True)
 
     # Get quiz_id from URL parameters (use st.query_params instead of deprecated experimental)
     query_params = st.query_params
@@ -196,7 +205,12 @@ def main():
         if questions:
             show_quiz_interface(questions)
         else:
-            st.error("Quiz not found. Please generate a new quiz.")
+            st.error(
+                "Quiz not found. Please generate a new quiz.\n\n"
+                "Note: On Streamlit Cloud, quizzes are only available if generated in the current deployment. "
+                "If you just deployed or rebooted the app, please generate a new quiz and share the new link. "
+                "For permanent quiz links, consider using a database or Google Drive for storage."
+            )
             quiz_id = None
 
     if not quiz_id:
