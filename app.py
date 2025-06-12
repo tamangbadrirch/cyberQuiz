@@ -234,7 +234,9 @@ def main():
     """, unsafe_allow_html=True)
 
     query_params = st.query_params
-    quiz_id = query_params.get("quiz", [None])[0] if "quiz" in query_params else None
+    quiz_id = query_params.get("quiz", None)
+    if isinstance(quiz_id, list):
+        quiz_id = quiz_id[0]
 
     if quiz_id:
         questions = load_quiz_from_supabase(quiz_id)
