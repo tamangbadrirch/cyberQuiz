@@ -27,7 +27,10 @@ def load_quiz_from_supabase(quiz_id):
     supabase: Client = get_supabase_client()
     result = supabase.table("quizzes").select("questions_json").eq("quiz_id", quiz_id).execute()
     if result.data and len(result.data) > 0:
-        return result.data[0]["questions_json"]
+        questions = result.data[0]["questions_json"]
+        if isinstance(questions, str):
+            questions = json.loads(questions)
+        return questions
     return None
 
 # Get API key from Streamlit secrets
@@ -235,7 +238,9 @@ def main():
 
     if quiz_id:
         questions = load_quiz_from_supabase(quiz_id)
-        if questions:
+        st.write("DEBUG: quiz_id from URL:", quiz_id)
+        st.write("DEBUG: questions loaded from Supabase:", questions)
+        if questions and isinstance(questions, list) and len(questions) > 0:
             show_quiz_interface(questions)
         else:
             st.error(
