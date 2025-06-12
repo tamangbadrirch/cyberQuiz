@@ -115,8 +115,13 @@ def parse_mcqs(gemini_response):
         answer_line = next((l for l in lines if l.startswith("Answer:")), None)
         explanation_line = next((l for l in lines if l.startswith("Explanation:")), None)
         if answer_line and explanation_line and len(options) == 4:
-            answer_letter = answer_line.split(":")[1].strip()
-            correct_index = "ABCD".index(answer_letter)
+            answer_letter = answer_line.split(":", 1)[1].strip()
+            # Only accept A/B/C/D as valid answers
+            if answer_letter in "ABCD":
+                correct_index = "ABCD".index(answer_letter)
+            else:
+                # If not valid, skip this question
+                continue
             explanation = explanation_line.split(":", 1)[1].strip()
             questions.append({
                 "question": q,
