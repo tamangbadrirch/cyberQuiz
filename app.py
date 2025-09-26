@@ -92,7 +92,7 @@ def clean_text(text, max_words=600):
 
 def generate_mcqs_with_gemini(text, num_questions):
     genai.configure(api_key=GEMINI_API_KEY)
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    model = genai.GenerativeModel("gemini-2.5-flash")
     prompt = (
         f"You are a cybersecurity teacher. Based on the following content, generate {num_questions} high-quality, conceptual multiple-choice questions (MCQs) for students. "
         "Each question should have 4 options (A, B, C, D), only one correct answer, and a short explanation. "
